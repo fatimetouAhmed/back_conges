@@ -1,18 +1,21 @@
-FROM eclipse-temurin:11-jdk-alpine as build
-WORKDIR /workspace/app
 
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
-COPY src src
+# Utilise une image de base Java 19
+FROM openjdk:19
 
-RUN ./mvnw install -DskipTests
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
+# Définit un répertoire de travail pour l'application
+WORKDIR /app
 
-FROM eclipse-temurin:11-jre-alpine
-VOLUME /tmp
-ARG DEPENDENCY=/workspace/app/target/dependency
-COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.isace.facturation.FacturationApplication"]
+# Copie les fichiers de l'application dans le répertoire de travail
+COPY target/gestion_conge_back-end.jar .
+
+# Copie le fichier de configuration MySQL dans le répertoire de travail
+COPY mysql.properties .
+
+# Met à jour le système et installe le client MySQL
+RUN apt-get update && apt-get install -y mysql-client
+
+# Expose le port 8080 pour l'application
+EXPOSE 8080
+
+# Démarre l'application lorsque le conteneur Docker est lancé
+CMD ["java", "-jar", "gestion_conge_back-end.jar"]
