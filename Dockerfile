@@ -11,8 +11,7 @@
 # EXPOSE 8080
 
 # CMD ["java", "-jar", "back_conges.jar"]
-
-FROM openjdk:19 as build
+FROM openjdk:11-jdk-alpine as build
 WORKDIR /workspace/app
 
 COPY mvnw .
@@ -23,7 +22,7 @@ COPY src src
 RUN ./mvnw install -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
-FROM openjdk:19-jre-alpine
+FROM openjdk:11-jdk-alpine
 VOLUME /tmp
 ARG DEPENDENCY=/workspace/app/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
