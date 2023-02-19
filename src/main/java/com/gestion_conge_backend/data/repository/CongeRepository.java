@@ -12,9 +12,9 @@ import java.util.List;
 @Repository
 public interface CongeRepository extends JpaRepository<CongeEntity,Integer> {
   //  String stat="Non Confirmer";
-    @Query("SELECT c FROM CongeEntity   c WHERE c.status ='Non Confirmer'")
+    @Query("SELECT c FROM CongeEntity   c WHERE c.status ='' or c.status IS NULL")
     List<CongeEntity> conge_NO_Confirmer();
-    @Query(value = "SELECT * FROM conge c WHERE c.status ='Non Confirmer'",nativeQuery = true)
+    @Query(value = "SELECT * FROM conge c WHERE c.status ='' or c.status IS NULL",nativeQuery = true)
     List<CongeEntity> conge_NO_ConfirmerSQL();
     @Query("SELECT c FROM CongeEntity   c WHERE c.status ='Confirmer'")
     List<CongeEntity> congeConfirmer();

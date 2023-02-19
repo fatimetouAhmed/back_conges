@@ -72,22 +72,22 @@ public class CongeService {
 //    public void updateStatus(String query) {
 //
 //    }
-public CongeEntity modifierStatus(int id, String status) {
-    CongeEntity conge=new CongeEntity();
-    return congeRepository.findById(id)
-            .map(
-                    e->{
-                        e.setStatus(conge.getStatus());
-                        return congeRepository.save(e);
-                    }
-            ).orElseThrow(()-> new RuntimeException("Conge non trouve"));
-}
+
+    public CongeEntity modifierStatus(int id, String status) {
+        return congeRepository.findById(id)
+                .map(
+                        e->{
+                            e.setStatus(status);
+                            return congeRepository.save(e);
+                        }
+                ).orElseThrow(()-> new RuntimeException("Conge non trouve"));
+    }
     public EmploiyeeEntity modifierEmploiyeStatus(int id, String status) {
-       EmploiyeeEntity emploiye=new EmploiyeeEntity();
+
         return emploiyeRepository.findById(id)
                 .map(
                         e->{
-                            e.setStatus(emploiye.getStatus());
+                            e.setStatus(status);
                             return emploiyeRepository.save(e);
                         }
                 ).orElseThrow(()-> new RuntimeException("status non trouve"));
